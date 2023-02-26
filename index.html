@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Iconos-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!--Toastify-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!--CSS-->
+    <link rel="stylesheet" href="estilos.css">
+    <title>Casa de cambio</title>
+</head>
+<body>
+    <!--Menu proyecto-->  
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Casa de Cambio</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon "></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+              <form class="d-flex">
+                <input id="buscador" type="text" class="form-control me-2" placeholder="Busqueda por nombre" aria-label="Search">
+                <button id="btnBuscar" class="btn btn-outline-light">Buscar</button>
+              </form> 
+            </ul>
+            <ul class="navbar-nav me-auto"><button id="agregarMoneda" data-bs-toggle="modal" data-bs-target="#idModalAgregarMoneda" class="btn btn-outline-light m-2">Agregar Moneda</button>
+              <button id="iniciarCompra" data-bs-toggle="modal" data-bs-target="#idModalComprarMoneda" class="btn btn-outline-light m-2">Comprar Moneda</button></ul>
+            <ul class="navbar-nav me-auto">
+              <select id="selectOrden" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <option selected>Ordenar por:</option>
+                <option value="1">Mayor a menor</option>
+                <option value="2">Menor a mayor</option>
+                <option value="3">Alfabeticamente</option>
+              </select>
+            </ul>
+          </div>
+          
+        </div> 
+      </nav>
+
+    <center> <h1>Casa de cambio</h1></center>
+   
+    
+    <div class="d-flex justify-content-center" id="loader">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div id="coincidencia"></div>
+      <ul id="listaMonedas" class="list-group">
+      </ul>
+    </div>
+    <div class="container transacciones">
+      <h2>Transacciones</h2>
+        <ul id="ListaTransacciones" class="list-group">
+        </ul>
+    </div>
+    
+    
+    
+    <!--Modals-->
+    <!--Modal Agregar Moneda-->
+    <div class="modal fade" id="idModalAgregarMoneda" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar Moneda</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombreInput" aria-describedby="nombre">
+                
+              </div>
+              <div class="mb-3">
+                <label for="valorCompra" class="form-label">Valor Compra</label>
+                <input type="number" class="form-control" id="valorCompraInput" aria-describedby="valor compra">
+                
+              </div>
+              <div class="mb-3">
+                <label for="valorVenta" class="form-label">Valor Venta</label>
+                <input type="number" class="form-control" id="valorVentaInput" aria-describedby="valor venta">
+                
+              </div>
+            </form>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="text" id="cargarMoneda" class="btn btn-success" data-bs-dismiss="modal">Agregar Moneda</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--comprar moneda -->
+    <div class="modal fade" id="idModalComprarMoneda" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Comprar Moneda</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="nombre" class="form-label">Cantidad de pesos a cambiar</label>
+                  <input type="number" class="form-control" id="pesosInput" aria-describedby="pesos">
+                  
+                </div>
+                <div class="mb-3">
+                  <label for="valorCompra" class="form-label">Moneda</label>
+                  <select id="monedaSelect" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                    <option selected>Seleccione una moneda</option>
+                    <option value="1">Dolar</option>
+                    <option value="2">Euro</option>
+                    <option value="3">Real</option>
+                  </select>
+                  
+                </div>
+              </form>
+            </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="text" id="comprarMoneda" class="btn btn-success" data-bs-dismiss="modal">Comprar Moneda</button>
+            </div>
+          </div>
+        </div>
+     </div>
+
+    
+  
+<!--Script de Bootstrap-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
+</script>
+<!--Script Toastify-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<!--Script Sweet Alert-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!--Script Luxon-->
+<script src="https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js"></script>
+<!--Archivos JS propios-->
+<script src="JS/transacciones.js"></script>
+<script src="JS/class.js"></script>
+<script src="JS/main.js"></script>
+</body>
+</html>
+
